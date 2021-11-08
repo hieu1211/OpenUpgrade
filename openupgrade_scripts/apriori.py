@@ -85,10 +85,12 @@ merged_modules = {
     # OCA/project
     "project_description": "project",
     "project_stage_closed": "project",
-    # OCA/web
-    "web_editor_background_color": "web_editor",
     # OCA/survey
     "survey_description": "survey",
+    # OCA/web
+    "web_editor_background_color": "web_editor",
+    # OCA/website
+    "website_cookie_notice": "website",
     # OCA/...
     # Viindoo/tvtmaaddons
     "to_l10n_vn_qweb_layout": "l10n_vn_common",

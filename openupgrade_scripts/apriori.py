@@ -44,6 +44,19 @@ renamed_modules = {
     # OCA/server-tools
     "openupgrade_records": "upgrade_analysis",
     # OCA/...
+    # Viindoo/tvtmaaddons
+    "to_print_payment_vi": "viin_l10n_vn_account_move_print",
+    "to_hr_recruitment_request": "viin_hr_recruitment_approval",
+    "to_tvtma_hr": "viin_hr",
+    "to_foreign_trade_currency_rate": "viin_foreign_trade_currency_rate",
+    "to_l10n_vn_foreign_trade": "viin_l10n_vn_foreign_trade",
+    "to_transit_loc_accounts": "viin_stock_internal_transit_valuation",
+    "viin_transit_loc_accounts_specific_identification": "viin_stock_internal_transit_valuation_specific_identification",
+    "to_partner_share_holder": "viin_partner_shareholder",
+    # Viindoo/erponline-enterprise
+    "to_enterprice_marks_account": "to_enterprise_marks_account",
+    "to_enterprice_marks_mrp": "to_enterprise_marks_mrp",
+    "to_hide_ent_modules_website_theme_install": "to_hide_ent_modules_website",
 }
 
 # Merged modules contain a mapping from old module names to other,
@@ -76,6 +89,19 @@ merged_modules = {
     # OCA/survey
     "survey_description": "survey",
     # OCA/...
+    # Viindoo/tvtmaaddons
+    "to_l10n_vn_qweb_layout": "l10n_vn_common",
+    "to_l10n_vn_account_detail_sheet": "to_account_reports_l10n_vn", # (moved to Viindoo/erponline-enterprise)
+    "to_l10n_vn_general_ledger": "to_account_reports_l10n_vn",  # (moved to Viindoo/erponline-enterprise)
+    "viin_l10n_vn_account_cash_book": "to_account_reports_l10n_vn", # (moved to Viindoo/erponline-enterprise)
+    "viin_l10n_vn_invoice_declaration": "to_account_reports_l10n_vn", # (moved to Viindoo/erponline-enterprise)
+    "to_foreign_trade": "viin_foreign_trade",
+    "to_foreign_trade_landed_cost": "viin_foreign_trade",
+    "to_einvoice_common": "l10n_vn_edi",
+    "viin_l10n_vn_einvoice_common": "l10n_vn_edi",
+    "to_warehouse_imp": "viin_stock",
+    # Viindoo/odoo-tvtma
+    "viin_hr_department_multilang": "viin_hr",
 }
 
 # only used here for upgrade_analysis
@@ -100,6 +126,11 @@ renamed_models = {
     "openupgrade.record": "upgrade.record",
     "openupgrade.generate.records.wizard": "upgrade.generate.record.wizard",
     "openupgrade.install.all.wizard": "upgrade.install.wizard",
+    # Viindoo/tvtmaaddons
+    "account.sinvoice.serial": "account.einvoice.serial",
+    "account.vninvoice.serial": "account.einvoice.serial",
+    # Viindoo/erponline-enterprise
+    "account.asset.asset.add.wizard": "asset.fill.missing.values.wizard",
 }
 
 # only used here for upgrade_analysis

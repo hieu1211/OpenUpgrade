@@ -15,3 +15,14 @@ def migrate(env, version):
         ],
     )
     env["slide.channel.partner"].search([])._recompute_completion()
+    openupgrade.copy_fields_multilang(
+        env.cr,
+        "slide.channel",
+        "slide_channel",
+        ["description_short"],
+        "id",
+        "slide.channel",
+        "slide_channel",
+        ["description"],
+        False,
+    )

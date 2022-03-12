@@ -87,7 +87,7 @@ survey       / survey.survey            / progression_mode (selection)  : NEW se
 # NOTHING TO DO: new feature
 
 survey       / survey.survey            / session_code (char)           : NEW hasdefault
-# NOTHING TO DO: new feature
+# DONE: pre-migration: filled (beginning with 1000)
 
 survey       / survey.survey            / session_question_id (many2one): NEW relation: survey.question
 survey       / survey.survey            / session_question_start_time (datetime): NEW

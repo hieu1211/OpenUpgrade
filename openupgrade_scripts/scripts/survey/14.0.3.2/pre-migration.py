@@ -221,6 +221,23 @@ def fill_survey_user_input_line_answer_is_correct(env):
     )
 
 
+def fill_survey_session_code(env):
+    openupgrade.logged_query(
+        env.cr, "ALTER TABLE survey_survey ADD COLUMN session_code varchar;"
+    )
+    openupgrade.logged_query(
+        env.cr,
+        """
+        UPDATE survey_survey ss
+        SET session_code = sub.number || ''
+        FROM (
+            SELECT id, ROW_NUMBER() OVER(ORDER BY id) + 999 AS number
+            FROM survey_survey
+        ) sub
+        WHERE sub.id = ss.id""",
+    )
+
+
 @openupgrade.migrate()
 def migrate(env, version):
     openupgrade.copy_columns(env.cr, _column_copies)
@@ -231,6 +248,7 @@ def migrate(env, version):
     fill_survey_survey_session_state(env)
     fast_fill_survey_input_some_values(env)
     fill_survey_user_input_line_answer_is_correct(env)
+    fill_survey_session_code(env)
     # Disappeared constraint
     openupgrade.logged_query(
         env.cr,

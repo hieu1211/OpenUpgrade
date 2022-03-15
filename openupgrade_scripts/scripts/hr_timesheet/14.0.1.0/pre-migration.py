@@ -18,14 +18,4 @@ def _fill_task_overtime(env):
 
 @openupgrade.migrate()
 def migrate(env, version):
-    openupgrade.set_xml_ids_noupdate_value(
-        env,
-        "hr_timesheet",
-        [
-            "timesheet_line_rule_user",
-            "group_timesheet_manager",
-            "group_hr_timesheet_approver",
-        ],
-        True,
-    )
     _fill_task_overtime(env)

@@ -5,5 +5,16 @@ from openupgradelib import openupgrade
 
 @openupgrade.migrate()
 def migrate(env, version):
+    openupgrade.set_xml_ids_noupdate_value(
+        env,
+        "hr_timesheet",
+        [
+            "timesheet_line_rule_user",
+            "group_timesheet_manager",
+            "group_hr_timesheet_approver",
+        ],
+        True,
+    )
+
     # Load noupdate changes
     openupgrade.load_data(env.cr, "hr_timesheet", "14.0.1.0/noupdate_changes.xml")

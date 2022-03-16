@@ -28,4 +28,12 @@ def migrate(env, version):
         ],
         True,
     )
+    openupgrade.delete_record_translations(
+        env.cr,
+        "hr_timesheet",
+        [
+            "group_hr_timesheet_user",
+            "group_hr_timesheet_approver",
+        ],
+    )
     _fill_task_overtime(env)

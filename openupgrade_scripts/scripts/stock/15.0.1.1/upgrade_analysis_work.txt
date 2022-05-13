@@ -13,13 +13,40 @@ new model stock.storage.category
 new model stock.storage.category.capacity
 ---Fields in module 'stock'---
 stock        / barcode.rule             / type (False)                  : selection_keys is now '['alias', 'expiration_date', 'location', 'location_dest', 'lot', 'package', 'package_type', 'packaging_date', 'product', 'quantity', 'use_date', 'weight']' ('['alias', 'location', 'lot', 'package', 'product', 'weight']')
+# NOTHING TO DO: new feature, keys added in new module barcodes_gs1_nomenclature to integrate and use GS1 nomenclature
+
 stock        / product.category         / packaging_reserve_method (selection): NEW selection_keys: ['full', 'partial'], hasdefault
+# DONE: post-migration: Fill default value 'partial'
+
+stock        / stock.package.type       / barcode (char)                : NEW
+stock        / stock.package.type       / company_id (many2one)         : NEW relation: res.company
+stock        / stock.package.type       / height (integer)              : NEW
+stock        / stock.package.type       / max_weight (float)            : NEW
+stock        / stock.package.type       / name (char)                   : NEW required
+stock        / stock.package.type       / packaging_length (integer)    : NEW
+stock        / stock.package.type       / sequence (integer)            : NEW hasdefault
+stock        / stock.package.type       / storage_category_capacity_ids (one2many): NEW relation: stock.storage.category.capacity
+stock        / stock.package.type       / width (integer)               : NEW
+# DONE: post-migration: fill data from product.packaging (only fill barcode, company, sequence, name. Others column must be done in delivery script)
+
 stock        / product.packaging        / package_type_id (many2one)    : NEW relation: stock.package.type
+stock        / stock.quant.package      / package_type_id (many2one)    : NEW relation: stock.package.type
+stock        / stock.quant.package      / packaging_id (many2one)       : DEL relation: product.packaging
+# DONE: post-migration: base on product_packaging, fill stock.package.type just created above
+
 stock        / product.packaging        / route_ids (many2many)         : NEW relation: stock.location.route
+# NOTHING TO DO: new feature
+
 stock        / product.product          / storage_category_capacity_ids (one2many): NEW relation: stock.storage.category.capacity
+# NOTHING TO DO: new feature
+
 stock        / product.template         / detailed_type (False)         : NEW selection_keys: ['consu', 'gift', 'product', 'service'], mode: modify
+# NOTHING TO DO: done in 'product' migration
+
 stock        / res.company              / annual_inventory_day (integer): NEW hasdefault
 stock        / res.company              / annual_inventory_month (selection): NEW selection_keys: ['1', '10', '11', '12', '2', '3', '4', '5', '6', '7', '8', '9'], hasdefault
+# NOTHING TO DO: new feature
+
 stock        / stock.inventory          / activity_ids (one2many)       : DEL relation: mail.activity
 stock        / stock.inventory          / company_id (many2one)         : DEL relation: res.company, required, req_default: function
 stock        / stock.inventory          / date (datetime)               : DEL required, req_default: function
@@ -49,53 +76,92 @@ stock        / stock.inventory.line     / product_id (many2one)         : DEL re
 stock        / stock.inventory.line     / product_qty (float)           : DEL
 stock        / stock.inventory.line     / product_uom_id (many2one)     : DEL relation: uom.uom, required
 stock        / stock.inventory.line     / theoretical_qty (float)       : DEL
+stock        / stock.move               / inventory_id (many2one)       : DEL relation: stock.inventory
+# NOTHING TO DO: feature removed
+
 stock        / stock.location           / comment (text)                : type is now 'html' ('text')
+# DONE: pre-migration: convert data text to html
+
 stock        / stock.location           / cyclic_inventory_frequency (integer): NEW hasdefault
-stock        / stock.location           / incoming_move_line_ids (one2many): NEW relation: stock.move.line
+# DONE: pre-migration: Fill default value
+
 stock        / stock.location           / last_inventory_date (date)    : NEW
+# DONE: post-migration: Fill last date stock.inventory
+
 stock        / stock.location           / next_inventory_date (date)    : NEW isfunction: function, stored
+# NOTHING TO DO: new feature
+
+stock        / stock.location           / incoming_move_line_ids (one2many): NEW relation: stock.move.line
 stock        / stock.location           / outgoing_move_line_ids (one2many): NEW relation: stock.move.line
-stock        / stock.location           / storage_category_id (many2one): NEW relation: stock.storage.category
-stock        / stock.location           / warehouse_id (many2one)       : previously in module to_location_warehouse
+# NOTHING TO DO: virtual field
+
+stock        / stock.location           / storage_category_id (many2one): NEW relation: stock.storage.
+# NOTHING TO DO: new model, new feature
+
 stock        / stock.location           / warehouse_view_ids (one2many) : NEW relation: stock.warehouse
+stock        / stock.location           / warehouse_id (many2one)       : previously in module to_location_warehouse
+# NOTHING TO DO: compute no store
+
 stock        / stock.location.route     / packaging_ids (many2many)     : NEW relation: product.packaging
 stock        / stock.location.route     / packaging_selectable (boolean): NEW
-stock        / stock.move               / inventory_id (many2one)       : DEL relation: stock.inventory
+# NOTHING TO DO: new feature
+
 stock        / stock.move               / is_inventory (boolean)        : NEW
+# DONE: post-migration: set True if inventory_id not null
+
 stock        / stock.move               / note (text)                   : DEL
+# NOTHING TO DO: not used and always empty. remove it. (commit 71203e0aa28e358dfe432835557ea38bf1edae24)
+
 stock        / stock.move               / picking_type_id (many2one)    : now a function
+# NOTHING TO DO: not need recompute
+
 stock        / stock.move               / product_packaging_id (many2one): NEW relation: product.packaging
-stock        / stock.move               / reservation_date (date)       : NEW isfunction: function, stored
+# NOTHING TO DO: new feature
+
 stock        / stock.move.line          / _order                        : _order is now 'result_package_id desc, location_id asc, location_dest_id asc, picking_id asc, id' ('result_package_id desc, id')
-stock        / stock.package.type       / barcode (char)                : NEW
-stock        / stock.package.type       / company_id (many2one)         : NEW relation: res.company
-stock        / stock.package.type       / height (integer)              : NEW
-stock        / stock.package.type       / max_weight (float)            : NEW
-stock        / stock.package.type       / name (char)                   : NEW required
-stock        / stock.package.type       / packaging_length (integer)    : NEW
-stock        / stock.package.type       / sequence (integer)            : NEW hasdefault
-stock        / stock.package.type       / storage_category_capacity_ids (one2many): NEW relation: stock.storage.category.capacity
-stock        / stock.package.type       / width (integer)               : NEW
+# NOTHING TO DO
+
 stock        / stock.picking            / note (text)                   : type is now 'html' ('text')
+# Done: convert data text to html
+
 stock        / stock.picking.type       / print_label (boolean)         : NEW
+# DONE: set True for all outgoing picking type
+
 stock        / stock.picking.type       / reservation_days_before (integer): NEW
 stock        / stock.picking.type       / reservation_days_before_priority (integer): NEW
+# NOTHING TO DO
+
 stock        / stock.picking.type       / reservation_method (selection): NEW required, selection_keys: ['at_confirm', 'by_date', 'manual'], req_default: function, hasdefault
+# DONE: pre-migration:  fill default value(at_confirm) for all stock.picking.type
+
 stock        / stock.putaway.rule       / active (boolean)              : NEW hasdefault
 stock        / stock.putaway.rule       / package_type_ids (many2many)  : NEW relation: stock.package.type
 stock        / stock.putaway.rule       / storage_category_id (many2one): NEW relation: stock.storage.category
+# NOTHING TO DO: new feature
+
 stock        / stock.quant              / in_date (datetime)            : now required, req_default: function
+# DONE: pre-migration: fill null record with default value(Date.now)
+
 stock        / stock.quant              / inventory_date (date)         : NEW isfunction: function, stored
 stock        / stock.quant              / inventory_diff_quantity (float): NEW isfunction: function, stored
 stock        / stock.quant              / inventory_quantity (float)    : is now stored
 stock        / stock.quant              / inventory_quantity (float)    : not a function anymore
 stock        / stock.quant              / inventory_quantity_set (boolean): NEW hasdefault, isfunction: function, stored
+stock        / stock.move               / reservation_date (date)       : NEW isfunction: function, stored
+# DONE: pre-migration: create column to avoid computing (base on compute method, =null is True)
+
 stock        / stock.quant              / user_id (many2one)            : NEW relation: res.users
+# NOTHING TO DO: new feature
+
 stock        / stock.quant.package      / name (char)                   : now required, req_default: function
-stock        / stock.quant.package      / package_type_id (many2one)    : NEW relation: stock.package.type
+# DONE: pre-migration: Fill value for record null
+
 stock        / stock.quant.package      / package_use (selection)       : NEW required, selection_keys: ['disposable', 'reusable'], req_default: function, hasdefault
-stock        / stock.quant.package      / packaging_id (many2one)       : DEL relation: product.packaging
+# DONE: pre-migration: fill default value (move from odoo enterprise)
+
 stock        / stock.rule               / propagate_carrier (boolean)   : NEW hasdefault
+# NOTHING TO DO: new feature default False
+
 stock        / stock.storage.category   / allow_new_product (selection) : NEW required, selection_keys: ['empty', 'mixed', 'same'], req_default: function, hasdefault
 stock        / stock.storage.category   / capacity_ids (one2many)       : NEW relation: stock.storage.category.capacity
 stock        / stock.storage.category   / company_id (many2one)         : NEW relation: res.company
@@ -106,7 +172,11 @@ stock        / stock.storage.category.capacity / package_type_id (many2one)    :
 stock        / stock.storage.category.capacity / product_id (many2one)         : NEW relation: product.product
 stock        / stock.storage.category.capacity / quantity (float)              : NEW required
 stock        / stock.storage.category.capacity / storage_category_id (many2one): NEW relation: stock.storage.category, required
+# NOTHING TO DO: new feature
+
 stock        / stock.warehouse          / return_type_id (many2one)     : NEW relation: stock.picking.type
+# DONE: post-migration: create default return type for all warehouses
+
 ---XML records in module 'stock'---
 NEW ir.actions.act_window: stock.action_get_picking_type_operations
 NEW ir.actions.act_window: stock.action_lead_mass_mail

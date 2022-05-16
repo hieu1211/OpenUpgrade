@@ -77,6 +77,27 @@ _process_end._original_method = IrModelData._process_end
 IrModelData._process_end = _process_end
 
 
+@api.model
+def _process_end_unlink_record(self, record):
+    """Disappeared constraint"""
+    if record._name == "ir.model.constraint" and record.model.model in self.env:
+        openupgrade.logged_query(
+            self.env.cr,
+            """
+            ALTER TABLE {}
+            DROP CONSTRAINT IF EXISTS {}
+            """.format(
+                self.env[record.model.model]._table,
+                record.name,
+            ),
+        )
+    return IrModelData._process_end_unlink_record._original_method(self, record)
+
+
+_process_end_unlink_record._original_method = IrModelData._process_end_unlink_record
+IrModelData._process_end_unlink_record = _process_end_unlink_record
+
+
 def _module_data_uninstall(self):
     """Don't delete many2many relation tables. Only unlink the
     ir.model.relation record itself.

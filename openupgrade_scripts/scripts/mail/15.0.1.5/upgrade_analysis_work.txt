@@ -58,7 +58,7 @@ mail         / mail.channel             / moderation_ids (one2many)     : DEL re
 mail         / mail.channel             / moderation_notify (boolean)   : DEL
 mail         / mail.channel             / moderation_notify_msg (text)  : DEL
 mail         / mail.channel             / moderator_ids (many2many)     : DEL relation: res.users
-# DONE: transfer data to mail.group
+# NOTHING TO DO: new feature
 
 mail         / mail.channel.partner     / channel_id (many2one)         : now required
 # NOTHING DO TO: nocase in v14 that this field is null

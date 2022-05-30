@@ -46,14 +46,6 @@ def compute_detailed_type_and_type(env):
         WHERE type = 'consu' OR type = 'service'
         """,
     )
-    openupgrade.logged_query(
-        env.cr,
-        """
-        UPDATE product_template
-        SET type = detailed_type
-        WHERE detailed_type = 'consu' OR detailed_type = 'service'
-        """,
-    )
 
 
 @openupgrade.migrate()

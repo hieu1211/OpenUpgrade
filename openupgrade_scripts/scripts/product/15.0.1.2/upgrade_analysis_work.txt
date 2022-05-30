@@ -25,7 +25,7 @@ product      / product.template         / detailed_type (selection)     : NEW re
 # DONE: move vale of type to detailed_type
 
 product      / product.template         / type (selection)              : now a function
-# DONE: pre-migration: compute type for stored
+# NOTHING TO DO
 
 product      / product.template         / priority (selection)          : NEW selection_keys: ['0', '1'], hasdefault
 # NOTHING TO DO: new fields

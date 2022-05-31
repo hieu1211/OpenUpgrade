@@ -55,7 +55,7 @@ def _create_default_return_type_for_all_warehouses(env):
             [("sequence", "!=", False)],
             ["sequence"],
             limit=1,
-            order='sequence desc',
+            order="sequence desc",
         )
         max_sequence = max_sequence and max_sequence[0]["sequence"] or 0
 

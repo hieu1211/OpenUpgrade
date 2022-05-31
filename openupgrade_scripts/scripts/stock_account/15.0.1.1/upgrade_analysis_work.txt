@@ -5,7 +5,7 @@ stock_account / stock.quant              / accounting_date (date)        : NEW
 # NOTHING TO DO: now this fields use in once
 
 stock_account / stock.move               / analytic_account_line_id (many2one): NEW relation: account.analytic.line
-# NOTHING TO DO
+# NOTHING TO DO: feature for analytic accounting on MO
 
 ---XML records in module 'stock_account'---
 NEW ir.ui.view: stock_account.stock_account_report_invoice_document

@@ -38,32 +38,44 @@ def _create_default_return_type_for_all_warehouses(env):
     all_warehouses = env["stock.warehouse"].with_context(active_test=True).search([])
     for wh in all_warehouses:
         # choose the next available color for the operation types of this warehouse
-        all_used_colors = [res['color'] for res in env['stock.picking.type'].search_read([('warehouse_id', '!=', False), ('color', '!=', False)], ['color'], order='color')]
+        all_used_colors = [
+            res["color"]
+            for res in env["stock.picking.type"].search_read(
+                [("warehouse_id", "!=", False), ("color", "!=", False)],
+                ["color"],
+                order="color",
+            )
+        ]
         available_colors = [zef for zef in range(0, 12) if zef not in all_used_colors]
         color = available_colors[0] if available_colors else 0
 
         sequence_data = wh._get_sequence_values()
         # suit for each warehouse: reception, internal, pick, pack, ship
-        max_sequence = env['stock.picking.type'].search_read([('sequence', '!=', False)], ['sequence'], limit=1, order='sequence desc')
-        max_sequence = max_sequence and max_sequence[0]['sequence'] or 0
+        max_sequence = env["stock.picking.type"].search_read(
+            [("sequence", "!=", False)],
+            ["sequence"],
+            limit=1,
+            order='sequence desc',
+        )
+        max_sequence = max_sequence and max_sequence[0]["sequence"] or 0
 
         values = wh._get_picking_type_update_values()["return_type_id"]
         create_data, _ = wh._get_picking_type_create_values(max_sequence)
 
         values.update(create_data["return_type_id"])
-        sequence = env['ir.sequence'].create(sequence_data["return_type_id"])
+        sequence = env["ir.sequence"].create(sequence_data["return_type_id"])
         values.update(
             warehouse_id=wh.id,
             color=color,
             sequence_id=sequence.id,
-            sequence=max_sequence+1,
+            sequence=max_sequence + 1,
         )
         # create return picking type
-        return_type_id = env['stock.picking.type'].create(values).id
+        return_type_id = env["stock.picking.type"].create(values).id
         # update return pikcing type for warehouse
-        wh.write({'return_type_id': return_type_id})
-        wh.out_type_id.write({'return_picking_type_id': return_type_id})
-        wh.in_type_id.write({'return_picking_type_id': wh.out_type_id.id})
+        wh.write({"return_type_id": return_type_id})
+        wh.out_type_id.write({"return_picking_type_id": return_type_id})
+        wh.in_type_id.write({"return_picking_type_id": wh.out_type_id.id})
 
 
 def _fill_stock_quant_last_inventory_date(env):

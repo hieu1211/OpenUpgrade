@@ -399,6 +399,15 @@ def _fast_fill_account_payment_outstanding_account_id(env):
     )
 
 
+def _delete_records_conflict(env):
+    openupgrade.delete_records_safely_by_xml_id(
+        env,
+        [
+            "account.invoice_send",
+        ],
+    )
+
+
 @openupgrade.migrate()
 def migrate(env, version):
     openupgrade.set_xml_ids_noupdate_value(
@@ -425,3 +434,4 @@ def migrate(env, version):
     _fill_res_company_account_journal_payment_debit_account_id(env)
     _fast_fill_account_payment_outstanding_account_id(env)
     _fill_account_tax_country_id(env)
+    _delete_records_conflict(env)

@@ -182,8 +182,12 @@ ir.actions.act_window: account.action_account_resequence (noupdate) (noupdate sw
 
 NEW ir.actions.act_window: account.action_tax_group
 DEL ir.actions.act_window: account.action_cash_box_out
+# NOTHING TO DO
+
 DEL ir.actions.act_window: account.invoice_send
 NEW ir.actions.server: account.invoice_send
+# DONE: pre-migration: 2 record same id but different model, so we need delete record in v14 manual
+
 NEW ir.model.access: account.access_account_accrued_orders_wizard
 NEW ir.model.access: account.access_account_payment_method_line
 NEW ir.model.access: account.access_account_payment_method_line_readonly

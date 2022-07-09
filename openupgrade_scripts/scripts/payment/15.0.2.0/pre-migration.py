@@ -50,6 +50,16 @@ def fast_fill_payment_transaction_partner_id(env):
     )
 
 
+def convert_payment_acquirer_provider(env):
+    openupgrade.logged_query(
+        env.cr,
+        """
+        UPDATE payment_acquirer
+        SET provider = 'none'
+        WHERE provider = 'manual'""",
+    )
+
+
 @openupgrade.migrate()
 def migrate(env, version):
     fast_fill_payment_token_name(env)
@@ -77,3 +87,4 @@ def migrate(env, version):
             ),
         ],
     )
+    convert_payment_acquirer_provider(env)

@@ -1,16 +1,6 @@
 from openupgradelib import openupgrade
 
 
-def convert_payment_acquirer_provider(env):
-    openupgrade.logged_query(
-        env.cr,
-        """
-        UPDATE payment_acquirer
-        SET provider = 'none'
-        WHERE provider = 'manual'""",
-    )
-
-
 def fill_payment_transaction_last_state_change(env):
     openupgrade.logged_query(
         env.cr,
@@ -53,6 +43,5 @@ def migrate(env, version):
             "payment_transaction_user_rule",
         ],
     )
-    convert_payment_acquirer_provider(env)
     fill_payment_transaction_partner_state_id(env)
     fill_payment_transaction_last_state_change(env)

@@ -15,3 +15,11 @@ def migrate(env, version):
             "mail_notification_channel_invite",
         ],
     )
+    openupgrade.logged_query(
+        env.cr,
+        """
+        UPDATE slide_channel_tag
+        SET color = trunc(random() * 11 + 1)
+        WHERE color IS NULL;
+        """,
+    )
